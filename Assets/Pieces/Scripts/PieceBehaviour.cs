@@ -1,12 +1,18 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using System.Collections;
 
-public abstract class PieceBehaviour : MonoBehaviour {
+[System.Serializable]
+public class PieceClicked : UnityEvent<PieceBehaviour> { }
+
+public abstract class PieceBehaviour : MonoBehaviour {    
 
     public int xPosition; // horizontal position on the chess board (from 0(a) to 8(i)) 
     public int yPosition; // vertical position on the chess board (from 0 to 9) 
     public GameObject owner;// The player that own the piece
+    public bool pieceSelected; // true for the current selected piece, false for the other
+    public PieceClicked pieceClicked = new PieceClicked();
 
     public virtual bool movement_Possible(int xNewPosition, int yNewPosition)
     {
@@ -22,11 +28,10 @@ public abstract class PieceBehaviour : MonoBehaviour {
 
             //change the transform in fonction of the new position
             char xPosition_in_Char = (char) ((int)'a' + xPosition);            
-            string intersectionName = xPosition_in_Char.ToString()+(yPosition).ToString();             
-            Image intersection = GameObject.Find(intersectionName).GetComponent<Image>();
+            string intersectionName = xPosition_in_Char.ToString()+(yPosition).ToString();
+            Button intersection = GameObject.Find(intersectionName).GetComponent<Button>();
             transform.position = intersection.transform.position;            
-
-            //end player turn
+            
             }
     }
 
@@ -36,7 +41,20 @@ public abstract class PieceBehaviour : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
-	
-	}
+	protected void Update () {
+        Image image = GetComponentInParent<Image>();
+        if (pieceSelected) image.color = Color.white;
+        else image.color = Color.grey;
+    }   
+
+    public void OnPieceSelected()
+    {
+        pieceClicked.Invoke(this);
+        pieceSelected =!pieceSelected;       
+    }
+
+    public void OnPieceUnselected()
+    {
+        pieceSelected = false;
+    }
 }
