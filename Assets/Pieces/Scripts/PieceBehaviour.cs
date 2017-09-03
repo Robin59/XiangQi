@@ -10,7 +10,7 @@ public abstract class PieceBehaviour : MonoBehaviour {
 
     public int xPosition; // horizontal position on the chess board (from 0(a) to 8(i)) 
     public int yPosition; // vertical position on the chess board (from 0 to 9) 
-    public GameObject owner;// The player that own the piece
+    public bool redPiece;// True if it's a red piece, false if it's a black piece
     public bool pieceSelected; // true for the current selected piece, false for the other
     public PieceClicked pieceClicked = new PieceClicked();
 
@@ -19,7 +19,7 @@ public abstract class PieceBehaviour : MonoBehaviour {
         return -1 < xNewPosition && xNewPosition < 9 && -1 < yNewPosition && xNewPosition < 10;
     }
 
-    public void moveTo(int xNewPosition, int yNewPosition)
+    public void MoveTo(int xNewPosition, int yNewPosition)
     {        
         if (movement_Possible(xNewPosition, yNewPosition))
         {
@@ -37,7 +37,7 @@ public abstract class PieceBehaviour : MonoBehaviour {
 
     // Use this for initialization
     protected void Start () {
-        moveTo(xPosition, yPosition);
+        MoveTo(xPosition, yPosition);
     }
 	
 	// Update is called once per frame
@@ -47,14 +47,15 @@ public abstract class PieceBehaviour : MonoBehaviour {
         else image.color = Color.grey;
     }   
 
-    public void OnPieceSelected()
+    public void OnClicked()
     {
         pieceClicked.Invoke(this);
-        pieceSelected =!pieceSelected;       
+        //pieceSelected =!pieceSelected;       
     }
 
-    public void OnPieceUnselected()
+    /*public void OnPieceUnselected()
     {
         pieceSelected = false;
-    }
+    }*/
+   
 }
