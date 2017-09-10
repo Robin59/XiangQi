@@ -17,16 +17,28 @@ public class GameModelScript : MonoBehaviour {
 	
 	}
 
-    public void EndTurn()
+    private void EndTurn()
     {
         currentPieceSelected.pieceSelected = false;
         currentPieceSelected = null;
+        //Verifi if the opponent is mat
         redPlayerTurn = !redPlayerTurn;
+    }
+
+    private void TryAttack(PieceBehaviour attackingPiece, PieceBehaviour attackedPiece)
+    {
+        if(attackingPiece.movement_Possible(attackedPiece.xPosition, attackedPiece.yPosition))
+        {        
+            attackingPiece.MoveTo(attackedPiece.xPosition, attackedPiece.yPosition);
+            attackedPiece.gameObject.SetActive(false);
+            EndTurn();
+        }
+        //else we do nothing
     }
 
     public void OnPositionClicked(byte x, byte y)
     {        
-        Debug.Log("Position clicked: "+x.ToString()+" "+y.ToString());
+        //Debug.Log("Position clicked: "+x.ToString()+" "+y.ToString());
         if (currentPieceSelected != null)
         {
             if (currentPieceSelected.movement_Possible(x,y))
@@ -39,7 +51,7 @@ public class GameModelScript : MonoBehaviour {
 
     public void OnPieceClicked(PieceBehaviour pieceBehaviour)
     {       
-        Debug.Log("Piece clicked: "+pieceBehaviour.xPosition+" "+pieceBehaviour.yPosition);
+        //Debug.Log("Piece clicked: "+pieceBehaviour.xPosition+" "+pieceBehaviour.yPosition);
         if (pieceBehaviour.redPiece == redPlayerTurn)
         {           
             if (pieceBehaviour.pieceSelected)
@@ -52,6 +64,10 @@ public class GameModelScript : MonoBehaviour {
                 pieceBehaviour.pieceSelected = true;
                 currentPieceSelected = pieceBehaviour;                
             }            
+        }
+        else if(currentPieceSelected != null)
+        {
+            TryAttack(currentPieceSelected, pieceBehaviour);
         }
     }
 }

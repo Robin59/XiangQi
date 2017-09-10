@@ -44,7 +44,8 @@ public abstract class PieceBehaviour : MonoBehaviour {
 	protected void Update () {
         Image image = GetComponentInParent<Image>();
         if (pieceSelected) image.color = Color.white;
-        else image.color = Color.grey;
+        else if (redPiece) image.color = Color.red;
+        else               image.color = Color.grey;
     }   
 
     public void OnClicked()
