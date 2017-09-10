@@ -20,19 +20,15 @@ public abstract class PieceBehaviour : MonoBehaviour {
     }
 
     public void MoveTo(int xNewPosition, int yNewPosition)
-    {        
-        if (movement_Possible(xNewPosition, yNewPosition))
-        {
-            xPosition = xNewPosition;
-            yPosition = yNewPosition;
+    {                
+        xPosition = xNewPosition;
+        yPosition = yNewPosition;
 
-            //change the transform in fonction of the new position
-            char xPosition_in_Char = (char) ((int)'a' + xPosition);            
-            string intersectionName = xPosition_in_Char.ToString()+(yPosition).ToString();
-            Button intersection = GameObject.Find(intersectionName).GetComponent<Button>();
-            transform.position = intersection.transform.position;            
-            
-            }
+        //change the transform in fonction of the new position
+        char xPosition_in_Char = (char) ((int)'a' + xPosition);            
+        string intersectionName = xPosition_in_Char.ToString()+(yPosition).ToString();
+        Button intersection = GameObject.Find(intersectionName).GetComponent<Button>();
+        transform.position = intersection.transform.position;                              
     }
 
     // Use this for initialization
